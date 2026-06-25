@@ -3,7 +3,7 @@
  * and special expression mappings. Pure data, no logic.
  */
 
-import type { FieldDefinition, SpecialAlias } from './types';
+import type { CronFieldName, FieldDefinition, SpecialAlias } from './types';
 
 /** Ordered list of cron field definitions with valid ranges and named aliases. */
 export const FIELDS: FieldDefinition[] = [
@@ -30,3 +30,14 @@ export const SPECIAL_ALIASES: Record< SpecialAlias, string > = {
   '@hourly':   '0 * * * *',
   '@reboot':   '@reboot'
 } as const;
+
+/** Quick lookup from field name to its definition. */
+export const FIELD_BY_NAME: Record< CronFieldName, FieldDefinition > = Object.fromEntries(
+  FIELDS.map( f => [ f.name, f ] )
+) as Record< CronFieldName, FieldDefinition >;
+
+/** Names of the five cron fields in standard order. */
+export const FIELD_NAMES = FIELDS.map( f => f.name );
+
+/** Number of standard cron fields. */
+export const FIELD_COUNT = FIELDS.length;
