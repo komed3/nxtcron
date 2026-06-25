@@ -3,7 +3,7 @@
  * and special expression mappings. Pure data, no logic.
  */
 
-import type { CronFieldName, FieldDefinition, SpecialAlias } from './types';
+import type { CronFieldName, CronObject, FieldDefinition, SpecialAlias } from './types';
 
 /** Ordered list of cron field definitions with valid ranges and named aliases. */
 export const FIELDS: FieldDefinition[] = [
@@ -29,6 +29,11 @@ export const SPECIAL_ALIASES: Record< SpecialAlias, string > = {
   '@midnight': '0 0 * * *',
   '@hourly':   '0 * * * *'
 } as const;
+
+/** Default cron field values for omitted fields in partial options. */
+export const CRON_DEFAULTS: CronObject = {
+  minute: "*", hour: "*", dayOfMonth: "*", month: "*", dayOfWeek: "*"
+};
 
 /** Quick lookup from field name to its definition. */
 export const FIELD_BY_NAME: Record< CronFieldName, FieldDefinition > = Object.fromEntries(

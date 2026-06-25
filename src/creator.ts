@@ -3,12 +3,8 @@
  * Builds cron expression strings from structured option objects.
  */
 
-import { FIELD_NAMES } from './const.js';
+import { CRON_DEFAULTS, FIELD_NAMES } from './const.js';
 import type { CronObject, CronOptions } from './types.js';
-
-const DEFAULTS: CronObject = {
-  minute: "*", hour: "*", dayOfMonth: "*", month: "*", dayOfWeek: "*"
-};
 
 /** Builds valid cron expression strings from structured options. */
 export class Creator {
@@ -20,7 +16,7 @@ export class Creator {
    * @returns A valid 5-field cron expression string.
    */
   public fromObject ( options: CronOptions ) : string {
-    const merged: CronObject = { ...DEFAULTS, ...options };
+    const merged: CronObject = { ...CRON_DEFAULTS, ...options };
     return FIELD_NAMES.map( name => merged[ name ] ).join( ' ' );
   }
 }
