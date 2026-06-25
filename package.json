@@ -8,6 +8,14 @@
     "email": "webmaster@komed3.de",
     "url": "https://komed3.de"
   },
+  "keywords": [
+    "cron",
+    "cron-parser",
+    "scheduler",
+    "typescript",
+    "zero-dependency",
+    "lightweight"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/komed3/nxtcron.git"
@@ -18,6 +26,9 @@
   "funding": {
     "type": "ko-fi",
     "url": "https://ko-fi.com/komed3"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   },
   "files": [
     "dist",
