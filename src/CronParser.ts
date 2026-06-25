@@ -3,8 +3,8 @@
  * Parses and validates cron expressions.
  */
 
-import { FIELD_BY_NAME } from './const';
-import type { CronFieldName, ParsedFieldComponent } from './types';
+import { FIELD_BY_NAME, SPECIAL_ALIASES } from './const';
+import type { CronFieldName, ParsedFieldComponent, SpecialAlias } from './types';
 
 /**
  * CronParser parses and validates cron expressions into structured objects.
@@ -91,5 +91,12 @@ export class CronParser {
 
     for ( const v of values ) if ( v < def.min || v > def.max )
       throw new Error( `Value ${ v } out of range [${ def.min }-${ def.max }] for field "${ fieldName }"` );
+  }
+
+  /** Expand a special alias into its 5-field equivalent. */
+  private expandAlias ( expression: string ) : string {
+    const trimmed = expression.trim().toLowerCase();
+    if ( trimmed in SPECIAL_ALIASES ) return SPECIAL_ALIASES[ trimmed as SpecialAlias ];
+    return expression.trim();
   }
 }
