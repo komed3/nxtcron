@@ -5,6 +5,15 @@
 /** Names of the five standard cron fields in order. */
 export type CronFieldName = 'minute' | 'hour' | 'dayOfMonth' | 'month' | 'dayOfWeek';
 
+/** A tuple representing the five standard cron fields in order. */
+export type CronTuple = readonly [
+  minute: string,
+  hour: string,
+  dayOfMonth: string,
+  month: string,
+  dayOfWeek: string
+];
+
 /** Special cron alias names. */
 export type SpecialAlias = '@yearly' | '@annually' | '@monthly' | '@weekly' | '@daily' | '@midnight' | '@hourly';
 
