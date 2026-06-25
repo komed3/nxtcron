@@ -5,7 +5,7 @@
  */
 
 import { WEEKDAY_MAP } from './const';
-import { Parser } from './parser';
+import { CronParser } from './parser';
 import type { DateParts } from './types';
 
 /**
@@ -16,9 +16,9 @@ import type { DateParts } from './types';
  * calc.getNextRun( '0 9 * * MON', { timezone: 'America/New_York' } );
  * calc.getNextRuns( '0 9 * * 1-5', { after: new Date(), count: 5 } );
  */
-export class Calculator {
-  private readonly parser: Parser;
-  constructor() { this.parser = new Parser() }
+export class CronCalculator {
+  private readonly parser: CronParser;
+  constructor() { this.parser = new CronParser() }
 
   /** Create a Date shifted by a given number of minutes. */
   private shiftDateByMinutes ( date: Date, minutes: number ) : Date {
