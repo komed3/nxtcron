@@ -3,8 +3,11 @@
  * Parses and validates cron expressions.
  */
 
-import { FIELD_BY_NAME, FIELD_COUNT, SPECIAL_ALIASES } from './const';
-import type { CronFieldName, CronObject, CronTuple, ParsedFieldComponent, SpecialAlias } from './types';
+import { FIELD_BY_NAME, FIELD_COUNT, FIELD_NAMES, SPECIAL_ALIASES } from './const';
+import type {
+  CronFieldName, CronObject, CronTuple, ParsedCronExpression, ParsedField,
+  ParsedFieldComponent, SpecialAlias
+} from './types';
 
 /**
  * CronParser parses and validates cron expressions into structured objects.
@@ -123,5 +126,28 @@ export class CronParser {
   public parse ( expression: string ) : CronObject {
     const [ minute, hour, dayOfMonth, month, dayOfWeek ] = this.splitFields( this.expandAlias( expression ) );
     return { minute, hour, dayOfMonth, month, dayOfWeek };
+  }
+
+  /**
+   * Parse a cron expression into a fully resolved internal representation
+   * with pre-computed value sets for efficient matching.
+   * 
+   * @param expression - A standard 5-field cron string or special alias.
+   * @returns A ParsedCronExpression with computed value sets.
+   * @throws Error if the expression is malformed or contains out-of-range values.
+   */
+  public parseFull ( expression: string ) : ParsedCronExpression {
+    const tokens = this.splitFields( this.expandAlias( expression ) );
+    const fields = {} as Record< CronFieldName, ParsedField >;
+
+    for ( let i = 0; i < FIELD_COUNT; i++ ) {
+      const fieldName = FIELD_NAMES[ i ], token = tokens[ i ];
+      const components = this.parseFieldToken( token, fieldName );
+      const values = this.computeValues( components, fieldName );
+      this.validateValues( values, fieldName );
+      fields[ fieldName ] = { name: fieldName, components, values };
+    }
+
+    return { fields, source: expression };
   }
 }
