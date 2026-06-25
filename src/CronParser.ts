@@ -3,7 +3,7 @@
  * Parses and validates cron expressions.
  */
 
-import { FIELD_BY_NAME, SPECIAL_ALIASES } from './const';
+import { FIELD_BY_NAME, FIELD_COUNT, SPECIAL_ALIASES } from './const';
 import type { CronFieldName, ParsedFieldComponent, SpecialAlias } from './types';
 
 /**
@@ -15,6 +15,23 @@ import type { CronFieldName, ParsedFieldComponent, SpecialAlias } from './types'
  * const valid = parser.validate( '0 9 * * MON' );
  */
 export class CronParser {
+  /** Split a cron expression string into its five field tokens. */
+  private splitFields ( expression: string ) : string[] {
+    const parts = expression.trim().split( /\s+/ );
+
+    if ( parts.length !== FIELD_COUNT )
+      throw new Error( `Expected ${ FIELD_COUNT } fields, got ${ parts.length } in "${ expression }"` );
+
+    return parts;
+  }
+
+  /** Expand a special alias into its 5-field equivalent. */
+  private expandAlias ( expression: string ) : string {
+    const trimmed = expression.trim().toLowerCase();
+    if ( trimmed in SPECIAL_ALIASES ) return SPECIAL_ALIASES[ trimmed as SpecialAlias ];
+    return expression.trim();
+  }
+
   /** Expand a named alias (e.g. JAN) to its numeric value for the given field. */
   private resolveAlias ( token: string, fieldName: CronFieldName ) : string {
     const def = FIELD_BY_NAME[ fieldName ];
@@ -91,12 +108,5 @@ export class CronParser {
 
     for ( const v of values ) if ( v < def.min || v > def.max )
       throw new Error( `Value ${ v } out of range [${ def.min }-${ def.max }] for field "${ fieldName }"` );
-  }
-
-  /** Expand a special alias into its 5-field equivalent. */
-  private expandAlias ( expression: string ) : string {
-    const trimmed = expression.trim().toLowerCase();
-    if ( trimmed in SPECIAL_ALIASES ) return SPECIAL_ALIASES[ trimmed as SpecialAlias ];
-    return expression.trim();
   }
 }
