@@ -3,8 +3,8 @@
  * Builds cron expression strings from structured option objects.
  */
 
-import { CRON_DEFAULTS, FIELD_NAMES } from './const.js';
-import type { CronObject, CronOptions } from './types.js';
+import { CRON_DEFAULTS, FIELD_NAMES } from './const';
+import type { CronObject, CronOptions } from './types';
 
 /** Builds valid cron expression strings from structured options. */
 export class CronCreator {
