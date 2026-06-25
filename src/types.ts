@@ -6,9 +6,7 @@
 export type CronFieldName = 'minute' | 'hour' | 'dayOfMonth' | 'month' | 'dayOfWeek';
 
 /** Special cron alias names. */
-export type SpecialAlias =
-  | '@yearly' | '@annually' | '@monthly' | '@weekly'
-  | '@daily' | '@midnight' | '@hourly' | '@reboot';
+export type SpecialAlias = '@yearly' | '@annually' | '@monthly' | '@weekly' | '@daily' | '@midnight' | '@hourly';
 
 /** Metadata for a single cron field definition. */
 export interface FieldDefinition {

@@ -27,8 +27,7 @@ export const SPECIAL_ALIASES: Record< SpecialAlias, string > = {
   '@weekly':   '0 0 * * 0',
   '@daily':    '0 0 * * *',
   '@midnight': '0 0 * * *',
-  '@hourly':   '0 * * * *',
-  '@reboot':   '@reboot'
+  '@hourly':   '0 * * * *'
 } as const;
 
 /** Quick lookup from field name to its definition. */
