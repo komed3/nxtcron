@@ -60,21 +60,21 @@ export class CronCalculator {
    */
   private buildDateFromParts ( year: number, month: number, day: number, hour: number, minute: number, tz: string ) : Date {
     const approx = new Date( Date.UTC( year, month - 1, day, hour, minute, 0, 0 ) );
-    const { hour: tzHour, minute: tzMinute, dayOfMonth, month: tzMonth } = this.getDatePartsInTimezone( approx, tz );
-    const offsetMs = ( tzHour - hour ) * 3.6e6 + ( tzMinute - minute ) * 6e4 +
-      ( dayOfMonth - day ) * 8.64e7 + ( tzMonth - month ) * 2.592e9;
+    const parts = this.getDatePartsInTimezone( approx, tz );
+    const offsetMs = ( parts.hour - hour ) * 3.6e6 + ( parts.minute - minute ) * 6e4 +
+      ( parts.dayOfMonth - day ) * 8.64e7 + ( parts.month - month ) * 2.592e9;
 
     const candidate = new Date( approx.getTime() - offsetMs );
     const v = this.getDatePartsInTimezone( candidate, tz );
 
-    if ( this.validateDateParts( { hour, minute, dayOfMonth, month }, v ) ) return candidate;
+    if ( this.validateDateParts( { hour, minute, dayOfMonth: day, month }, v ) ) return candidate;
 
     // Fallback: scan nearby minutes
     for ( let delta = -7200000; delta <= 7200000; delta += 60000 ) {
       const d = new Date( approx.getTime() + delta );
       const p = this.getDatePartsInTimezone( d, tz );
 
-      if ( this.validateDateParts( { year, month, dayOfMonth, hour, minute }, p ) ) return d;
+      if ( this.validateDateParts( { year, month, dayOfMonth: day, hour, minute }, p ) ) return d;
     }
 
     return candidate;
