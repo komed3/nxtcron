@@ -18,3 +18,15 @@ import { CronParser } from './parser';
 
 export { CronCalculator, CronCreator, CronParser };
 
+const calculator = new CronCalculator();
+const creator = new CronCreator();
+const parser = new CronParser();
+
+/** Parse a cron expression string into a structured object. */
+export const parse = parser.parse.bind( parser );
+
+/** Validate a cron expression without throwing. Returns true or false. */
+export const validate = parser.validate.bind( parser );
+
+/** Create a cron expression string from a partial options object. Omitted fields default to wildcard. */
+export const fromObject = creator.fromObject.bind( creator );
