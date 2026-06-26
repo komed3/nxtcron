@@ -35,10 +35,24 @@ export const validate = parser.validate.bind( parser );
 /** Create a cron expression string from a partial options object. Omitted fields default to wildcard. */
 export const fromObject = creator.fromObject.bind( creator );
 
+/** Create a cron expression string from a cron field tuple. */
+export const fromTuple = creator.fromTuple.bind( creator );
+
+/** Create a cron expression string from individual field values. Omitted fields default to wildcard. */
+export const create = creator.create.bind( creator );
+
+/** Get next scheduled run(s) after a reference date. */
+export const next = calculator.next.bind( calculator );
+
+/** Get previous scheduled run(s) before a reference date. */
+export const prev = calculator.prev.bind( calculator );
+
 /** Export the nxtcron object containing all instances and methods. */
 export const nxtcron = {
   calculator, creator, parser,
-  toObject, parse, validate, fromObject
+  toObject, parse, validate,
+  fromObject, fromTuple, create,
+  next, prev
 }
 
 /** Default export the nxtcron object. */

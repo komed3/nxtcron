@@ -19,7 +19,7 @@ export class CronCalculator {
     return this.instance ??= new CronCalculator();
   }
 
-  private constructor() {}
+  private constructor () {}
 
   /** Resolve string or parsed expression into ParsedCronExpression. */
   private resolve ( input: CronInput ) : ParsedCronExpression {
