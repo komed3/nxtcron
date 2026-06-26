@@ -92,9 +92,10 @@ export class CronCalculator {
   private match ( parsed: ParsedCronExpression, dom: number, dow: number ) : boolean {
     const { dayOfMonth, dayOfWeek } = parsed.fields;
 
-    return ( dayOfMonth.wildcard || dayOfWeek.wildcard )
-      ? dayOfMonth.values.has( dom ) || dayOfWeek.values.has( dow )
-      : dayOfMonth.values.has( dom ) && dayOfWeek.values.has( dow );
+    return dayOfMonth.wildcard && dayOfWeek.wildcard ? true
+      : dayOfMonth.wildcard ? dayOfWeek.values.has( dow )
+      : dayOfWeek.wildcard ? dayOfMonth.values.has( dom )
+      : dayOfMonth.values.has( dom ) || dayOfWeek.values.has( dow );
   }
 
   /** Validate chronological direction correctness. */
