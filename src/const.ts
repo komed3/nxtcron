@@ -32,7 +32,7 @@ export const SPECIAL_ALIASES: Record< SpecialAlias, string > = {
 
 /** Default cron field values for omitted fields in partial options. */
 export const CRON_DEFAULTS: CronObject = {
-  minute: "*", hour: "*", dayOfMonth: "*", month: "*", dayOfWeek: "*"
+  minute: '*', hour: '*', dayOfMonth: '*', month: '*', dayOfWeek: '*'
 };
 
 /** Quick lookup from field name to its definition. */
@@ -45,8 +45,3 @@ export const FIELD_NAMES = FIELDS.map( f => f.name );
 
 /** Number of standard cron fields. */
 export const FIELD_COUNT = FIELDS.length;
-
-/** Mapping of weekday names to their numeric values (0 = Sunday). */
-export const WEEKDAY_MAP: Record< string, number > = {
-  Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6
-} as const;
