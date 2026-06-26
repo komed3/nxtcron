@@ -12,18 +12,22 @@ export type {
   ScheduleController, ScheduleEvent, ScheduleOptions, SpecialAlias
 } from './types';
 
+import { CronBuilder } from './builder';
 import { CronCalculator } from './calculator';
 import { CronCreator } from './creator';
 import { CronParser } from './parser';
 import { CronScheduler } from './scheduler';
 
 /** Export classes. */
-export { CronCalculator, CronCreator, CronParser, CronScheduler };
+export { CronBuilder, CronCalculator, CronCreator, CronParser, CronScheduler };
 
 const calculator = CronCalculator.getInstance();
 const creator = CronCreator.getInstance();
 const parser = CronParser.getInstance();
 const scheduler = CronScheduler.getInstance();
+
+/** Create a cron expression using a immutable fluent builder. */
+export const build = CronBuilder.create;
 
 /** Convert a cron expression into a ordered CronTuple. */
 export const toTuple = parser.toTuple.bind( parser );
@@ -57,7 +61,7 @@ export const schedule = scheduler.schedule.bind( scheduler );
 
 /** Export the nxtcron object containing all instances and methods. */
 export const nxtcron = {
-  calculator, creator, parser, scheduler, toTuple, toObject, parse,
+  calculator, creator, parser, scheduler, build, toTuple, toObject, parse,
   validate, fromTuple, fromObject, create, next, prev, schedule
 }
 
