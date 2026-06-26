@@ -49,10 +49,8 @@ export const prev = calculator.prev.bind( calculator );
 
 /** Export the nxtcron object containing all instances and methods. */
 export const nxtcron = {
-  calculator, creator, parser,
-  toObject, parse, validate,
-  fromObject, fromTuple, create,
-  next, prev
+  calculator, creator, parser, toObject, parse, validate,
+  fromObject, fromTuple, create, next, prev
 }
 
 /** Default export the nxtcron object. */
