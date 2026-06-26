@@ -116,8 +116,7 @@ export interface FieldDefinition {
 export interface DateParts {
   year: number;
   month: number;
-  dayOfMonth: number;
+  day: number;
   hour: number;
   minute: number;
-  dayOfWeek: number;
 }

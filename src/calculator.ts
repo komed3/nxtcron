@@ -5,7 +5,7 @@
  */
 
 import { CronParser } from './parser';
-import type { CronInput, ParsedCronExpression, RunOptions } from './types';
+import type { CronInput, DateParts, ParsedCronExpression, RunOptions } from './types';
 
 /** Computes next/previous scheduled run times for cron expressions. */
 export class CronCalculator {
@@ -24,7 +24,7 @@ export class CronCalculator {
     return typeof input === 'string' ? CronCalculator.parser.parse( input ) : input;
   }
 
-  /** Binary search: lower bound (first >= x) */
+  /** Binary search: lower bound (first >= x). */
   private lower ( arr: readonly number[], x: number ) : number {
     let i = 0, len = arr.length;
 
@@ -37,7 +37,7 @@ export class CronCalculator {
     return i;
   }
 
-  /** Binary search: upper bound (last <= x) */
+  /** Binary search: upper bound (last <= x). */
   private upper ( arr: readonly number[], x: number ) : number {
     let i = 0, len = arr.length;
 
@@ -74,6 +74,21 @@ export class CronCalculator {
     }
 
     return out;
+  }
+
+  /** Extract timezone-safe date parts. */
+  private parts ( date: Date, tz: string ) : DateParts {
+    const f = new Intl.DateTimeFormat( 'en-US', {
+      timeZone: tz, year: 'numeric', month: 'numeric', day: 'numeric',
+      hour: 'numeric', minute: 'numeric', hour12: false
+    } ).formatToParts( date );
+
+    const g = ( t: string ) => Number( f.find( p => p.type === t )?.value ?? 0 );
+
+    return {
+      year: g( 'year' ), month: g( 'month' ), day: g( 'day' ),
+      hour: g( 'hour' ) % 24, minute: g( 'minute' )
+    };
   }
 
   /**
