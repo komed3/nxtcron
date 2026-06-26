@@ -63,32 +63,40 @@ export interface ScheduleController {
   off ( event: ScheduleEvent, handler: ( ...args: any[] ) => void ) : ScheduleController;
 }
 
+/** A parsed range or value with an optional step size. */
+export interface ParsedFieldComponent {
+  /** First value in the range (inclusive). */
+  start: number;
+  /** Last value in the range (inclusive). */
+  end: number;
+  /** Step interval between values. */
+  step: number;
+}
+
+/** A parsed cron field with its components and computed value set. */
+export interface ParsedField {
+  /** Name of the cron field. */
+  name: CronFieldName;
+  /** Parsed ranges and step definitions. */
+  components: ReadonlyArray< ParsedFieldComponent >;
+  /** All matching values for this field. */
+  values: ReadonlySet< number >;
+}
+
+/** A fully parsed cron expression. */
+export interface ParsedCronExpression {
+  /** Parsed data for each cron field. */
+  fields: Record< CronFieldName, ParsedField >;
+  /** Original cron expression passed to the parser. */
+  source: string;
+}
+
 /** @internal Metadata for a single cron field definition. */
 export interface FieldDefinition {
   readonly name: CronFieldName;
   readonly min: number;
   readonly max: number;
   readonly aliases: Record< string, number >;
-}
-
-/** @internal A parsed cron field component (range with step). */
-export interface ParsedFieldComponent {
-  start: number;
-  end: number;
-  step: number;
-}
-
-/** @internal A fully parsed cron field with pre-computed value set. */
-export interface ParsedField {
-  name: CronFieldName;
-  components: ReadonlyArray< ParsedFieldComponent >;
-  values: ReadonlySet< number >;
-}
-
-/** @internal A fully parsed cron expression. */
-export interface ParsedCronExpression {
-  fields: Record< CronFieldName, ParsedField >;
-  source: string;
 }
 
 /** @internal Cron-relevant components from a Date. */
