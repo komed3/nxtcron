@@ -137,9 +137,17 @@ export class CronParser {
 
     for ( let i = 0; i < FIELD_COUNT; i++ ) {
       const fieldName = FIELD_NAMES[ i ], token = tokens[ i ];
+      const { min, max } = FIELD_BY_NAME[ fieldName ];
+
       const components = this.parseFieldToken( token, fieldName );
       const values = this.computeValues( components, fieldName );
-      fields[ fieldName ] = { name: fieldName, components, values };
+      const sorted = [ ...values ].sort( ( a, b ) => a - b );
+
+      fields[ fieldName ] = {
+        name: fieldName, components, values, sorted,
+        min: sorted[ 0 ], max: sorted[ sorted.length - 1 ],
+        wildcard: values.size === max - min + 1
+      };
     }
 
     return { fields, source: expression };
