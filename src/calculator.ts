@@ -209,10 +209,10 @@ export class CronCalculator {
 
     for ( let i = 0; i < count; i++ ) {
       const next = this.step( parsed, cur, tz, dir );
-      if ( ! next ) break;
+      if ( ! next || ( out.length && next.getTime() === cur.getTime() ) ) break;
 
       out.push( next );
-      cur = new Date( next.getTime() + dir * 60000 );
+      cur = next;
     }
 
     return out;
