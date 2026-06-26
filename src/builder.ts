@@ -74,6 +74,11 @@ export class CronBuilder {
     return values.map( v => this.normalize( v ) ).join( ',' );
   }
 
+  /** Update the current cron field. */
+  private set ( values: ( string | number )[] ) : CronBuilder {
+    return this.next( { [ this.requireField() ]: this.buildExpr( values ) } );
+  }
+
   /** Select the minute field. */
   public minute () : CronBuilder {
     return this.next( {}, 'minute' );
