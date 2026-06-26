@@ -37,8 +37,13 @@ export class CronBuilder {
 
   /** Get the currently selected field definition. */
   private get def () : FieldDefinition {
+    return FIELD_BY_NAME[ this.requireField() ];
+  }
+
+  /** Ensure a cron field has been selected. */
+  private requireField () : CronFieldName {
     if ( ! this.field ) throw new Error( 'No cron field selected.' );
-    return FIELD_BY_NAME[ this.field ];
+    return this.field;
   }
 
   /** Create a new builder with updated state. */
@@ -48,7 +53,7 @@ export class CronBuilder {
 
   /** Update the current cron field. */
   private set ( value: string ) : CronBuilder {
-    return this.clone( { [ this.field! ]: value } );
+    return this.clone( { [ this.requireField() ]: value } );
   }
 
   /** Resolve alias or numeric field value. */
