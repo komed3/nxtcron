@@ -47,13 +47,13 @@ export class CronBuilder {
   }
 
   /** Create a new builder with updated state. */
-  private clone ( state: Partial< CronObject > = {}, current?: CronFieldName ) : CronBuilder {
+  private next ( state: Partial< CronObject > = {}, current?: CronFieldName ) : CronBuilder {
     return new CronBuilder( { ...this.state, ...state }, current ?? this.field );
   }
 
   /** Update the current cron field. */
   private set ( value: string ) : CronBuilder {
-    return this.clone( { [ this.requireField() ]: value } );
+    return this.next( { [ this.requireField() ]: value } );
   }
 
   /** Resolve alias or numeric field value. */
@@ -62,6 +62,31 @@ export class CronBuilder {
 
     const alias = this.def.aliases[ value.toUpperCase() ];
     return alias === undefined ? value.toUpperCase() : value.toUpperCase();
+  }
+
+  /** Select the minute field. */
+  public minute () : CronBuilder {
+    return this.next( {}, 'minute' );
+  }
+
+  /** Select the hour field. */
+  public hour () : CronBuilder {
+    return this.next( {}, 'hour' );
+  }
+
+  /** Select the day of month field. */
+  public dayOfMonth () : CronBuilder {
+    return this.next( {}, 'dayOfMonth' );
+  }
+
+  /** Select the month field. */
+  public month () : CronBuilder {
+    return this.next( {}, 'month' );
+  }
+
+  /** Select the day of week field. */
+  public dayOfWeek () : CronBuilder {
+    return this.next( {}, 'dayOfWeek' );
   }
 
   /** Output as standard 5-field cron expression string. */
