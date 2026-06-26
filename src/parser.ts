@@ -22,18 +22,18 @@ export class CronParser {
   private constructor () {}
 
   /** Expand a special alias into its 5-field equivalent. */
-  private expandAlias ( expression: string ) : string {
-    const trimmed = expression.trim().toLowerCase();
+  private expandAlias ( expr: string ) : string {
+    const trimmed = expr.trim().toLowerCase();
     if ( trimmed in SPECIAL_ALIASES ) return SPECIAL_ALIASES[ trimmed as SpecialAlias ];
-    return expression.trim();
+    return expr.trim();
   }
 
   /** Split a cron expression string into its five field tokens. */
-  private splitFields ( expression: string ) : CronTuple {
-    const parts = expression.trim().split( CronParser.SPLIT );
+  private splitFields ( expr: string ) : CronTuple {
+    const parts = expr.trim().split( CronParser.SPLIT );
 
     if ( parts.length !== FIELD_COUNT )
-      throw new Error( `Expected ${ FIELD_COUNT } fields, got ${ parts.length } in "${ expression }"` );
+      throw new Error( `Expected ${ FIELD_COUNT } fields, got ${ parts.length } in "${ expr }"` );
 
     return parts as unknown as CronTuple;
   }
@@ -104,17 +104,31 @@ export class CronParser {
   }
 
   /**
+   * Convert a cron expression into a ordered tuple.
+   * 
+   * @param expr - A standard 5-field cron string or special alias.
+   * @returns A CronTuple with ordered cron fields
+   * @throws Error if the expression is malformed.
+   * 
+   * @example
+   * parser.toTuple( '0 1 * * SAT,SUN' );
+   */
+  public toTuple ( expr: string ) : CronTuple {
+    return this.splitFields( this.expandAlias( expr ) );
+  }
+
+  /**
    * Convert a cron expression into a structured CronObject.
    * 
-   * @param expression - A standard 5-field cron string or special alias.
+   * @param expr - A standard 5-field cron string or special alias.
    * @returns A CronObject containing the raw field values.
    * @throws Error if the expression is malformed.
    * 
    * @example
    * parser.toObject( '0 9 * * MON' );
    */
-  public toObject ( expression: string ) : CronObject {
-    const [ minute, hour, dayOfMonth, month, dayOfWeek ] = this.splitFields( this.expandAlias( expression ) );
+  public toObject ( expr: string ) : CronObject {
+    const [ minute, hour, dayOfMonth, month, dayOfWeek ] = this.splitFields( this.expandAlias( expr ) );
     return { minute, hour, dayOfMonth, month, dayOfWeek };
   }
 
@@ -124,15 +138,15 @@ export class CronParser {
    * The returned object contains the parsed field definitions together with
    * pre-computed value sets for efficient schedule evaluation.
    * 
-   * @param expression - A standard 5-field cron string or special alias.
+   * @param expr - A standard 5-field cron string or special alias.
    * @returns A fully parsed cron expression.
    * @throws Error if the expression is malformed or contains invalid values.
    * 
    * @example
    * const parsed = parser.parse( '* 9-17 * JAN,MAR MON-FRI' );
    */
-  public parse ( expression: string ) : ParsedCronExpression {
-    const tokens = this.splitFields( this.expandAlias( expression ) );
+  public parse ( expr: string ) : ParsedCronExpression {
+    const tokens = this.splitFields( this.expandAlias( expr ) );
     const fields = {} as Record< CronFieldName, ParsedField >;
 
     for ( let i = 0; i < FIELD_COUNT; i++ ) {
@@ -150,21 +164,21 @@ export class CronParser {
       };
     }
 
-    return { fields, source: expression };
+    return { fields, source: expr };
   }
 
   /**
    * Validate a cron expression without throwing.
    * 
-   * @param expression - The cron expression to validate.
+   * @param expr - The cron expression to validate.
    * @returns true if valid, false otherwise.
    * 
    * @example
    * parser.validate( '0 9 * * MON' );  // true
    * parser.validate( '99 * * * *' );   // false
    */
-  public validate ( expression: string ) : boolean {
-    try { return this.parse( expression ) && true }
+  public validate ( expr: string ) : boolean {
+    try { return this.parse( expr ) && true }
     catch { return false }
   }
 }
