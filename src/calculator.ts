@@ -88,12 +88,11 @@ export class CronCalculator {
 
   /** Cron day matching logic (DOM + DOW semantics). */
   private match ( parsed: ParsedCronExpression, dom: number, dow: number ) : boolean {
-    const day = parsed.fields.dayOfMonth;
-    const dayOfWeek = parsed.fields.dayOfWeek;
+    const { dayOfMonth, dayOfWeek } = parsed.fields;
 
-    return ( day.wildcard || dayOfWeek.wildcard )
-      ? day.values.has( dom ) || dayOfWeek.values.has( dow )
-      : day.values.has( dom ) && dayOfWeek.values.has( dow );
+    return ( dayOfMonth.wildcard || dayOfWeek.wildcard )
+      ? dayOfMonth.values.has( dom ) || dayOfWeek.values.has( dow )
+      : dayOfMonth.values.has( dom ) && dayOfWeek.values.has( dow );
   }
 
   /** Extract timezone-safe date parts. */
