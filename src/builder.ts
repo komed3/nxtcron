@@ -41,6 +41,14 @@ export class CronBuilder {
     return FIELD_BY_NAME[ this.field ];
   }
 
+  /** Resolve alias or numeric field value. */
+  private resolve ( value: number | string ) : string {
+    if ( typeof value === 'number' ) return String( value );
+
+    const alias = this.def.aliases[ value.toUpperCase() ];
+    return alias === undefined ? value.toUpperCase() : value.toUpperCase();
+  }
+
   /** Output as standard 5-field cron expression string. */
   public toString () : string {
     return Object.values( this.state ).join( ' ' );
