@@ -128,11 +128,6 @@ export class CronBuilder {
     return this.set( `${ this.validateValue( from ) }-${ this.validateValue( to ) }/${ step }` );
   }
 
-  /** Output as standard 5-field cron expression string. */
-  public toString () : string {
-    return FIELD_NAMES.map( f => this.state[ f ] ).join( ' ' );
-  }
-
   /** Output as structured cron object. */
   public toObject () : CronObject {
     return { ...this.state };
@@ -140,6 +135,11 @@ export class CronBuilder {
 
   /* Output as ordered cron tuple. */
   public toTuple () : CronTuple {
-    return Object.values( this.state ) as unknown as CronTuple;
+    return FIELD_NAMES.map( f => this.state[ f ] ) as unknown as CronTuple;
+  }
+
+  /** Output as standard 5-field cron expression string. */
+  public toString () : string {
+    return this.toTuple().join( ' ' );
   }
 }
