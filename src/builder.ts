@@ -3,9 +3,9 @@
  * Create a cron expression using a immutable fluent builder.
  */
 
-import { CRON_DEFAULTS } from './const';
+import { CRON_DEFAULTS, FIELD_BY_NAME } from './const';
 import { CronParser } from './parser';
-import type { CronFieldName, CronObject, CronTuple, SpecialAlias } from './types';
+import type { CronFieldName, CronObject, CronTuple, FieldDefinition, SpecialAlias } from './types';
 
 /** Immutable fluent builder for cron expressions. */
 export class CronBuilder {
@@ -35,14 +35,23 @@ export class CronBuilder {
     this.state = { ...state }, this.field = field;
   }
 
+  /** Get the currently selected field definition. */
+  private get def () : FieldDefinition {
+    if ( ! this.field ) throw new Error( 'No cron field selected.' );
+    return FIELD_BY_NAME[ this.field ];
+  }
+
+  /** Output as standard 5-field cron expression string. */
   public toString () : string {
     return Object.values( this.state ).join( ' ' );
   }
 
+  /** Output as structured cron object. */
   public toObject () : CronObject {
     return this.state;
   }
 
+  /* Output as ordered cron tuple. */
   public toTuple () : CronTuple {
     return Object.values( this.state ) as unknown as CronTuple;
   }
