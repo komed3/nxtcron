@@ -46,46 +46,43 @@ export class CronParser {
 
   /** Parse a single field token into components. */
   private parseFieldToken ( token: string, fieldName: CronFieldName ) : ParsedFieldComponent[] {
-    const def = FIELD_BY_NAME[ fieldName ];
-    const components: ParsedFieldComponent[] = [];
-    const segments = token.split( ',' );
+    const { min, max } = FIELD_BY_NAME[ fieldName ], components: ParsedFieldComponent[] = [];
 
-    for ( const segment of segments ) {
-      let rangePart = segment, step = 1;
-      const slashIdx = rangePart.indexOf( '/' );
+    for ( let segment of token.split( ',' ) ) {
+      let step = 1;
 
-      if ( slashIdx !== -1 ) {
-        const stepStr = rangePart.substring( slashIdx + 1 ).trim();
-        step = Number( stepStr );
+      const slash = segment.indexOf( '/' );
+      if ( slash !== -1 ) {
+        step = Number( segment.slice( slash + 1 ).trim() );
 
         if ( Number.isNaN( step ) || step < 1 )
-          throw new Error( `Invalid step "${ stepStr }" in field "${ fieldName }"` );
+          throw new Error( `Invalid step "${ segment.slice( slash + 1 ).trim() }" in field "${ fieldName }"` );
 
-        rangePart = rangePart.substring( 0, slashIdx ).trim();
+        segment = segment.slice( 0, slash ).trim();
       }
 
       let start: number, end: number;
 
-      if ( rangePart === '*' ) start = def.min, end = def.max;
-      else if ( rangePart.includes( '-' ) ) {
-        const parts = rangePart.split( '-' );
+      if ( segment === '*' ) start = min, end = max;
+      else {
+        const dash = segment.indexOf( '-' );
 
-        if ( parts.length !== 2 )
-          throw new Error( `Invalid range "${ rangePart }" in field "${ fieldName }"` );
+        if ( dash === -1 ) {
+          start = end = Number( this.resolveAlias( segment.trim(), fieldName ) );
 
-        const resolvedStart = this.resolveAlias( parts[ 0 ].trim(), fieldName );
-        const resolvedEnd = this.resolveAlias( parts[ 1 ].trim(), fieldName );
-        start = Number( resolvedStart ), end = Number( resolvedEnd );
+          if ( Number.isNaN( start ) )
+            throw new Error( `Non-numeric value "${ segment }" in field "${ fieldName }"` );
+        } else {
+          start = Number( this.resolveAlias( segment.slice( 0, dash ).trim(), fieldName ) );
+          end = Number( this.resolveAlias( segment.slice( dash + 1 ).trim(), fieldName ) );
 
-        if ( Number.isNaN( start ) || Number.isNaN( end ) )
-          throw new Error( `Non-numeric range "${ rangePart }" in field "${ fieldName }"` );
-      } else {
-        const resolved = this.resolveAlias( rangePart.trim(), fieldName );
-        start = Number( resolved ), end = start;
-
-        if ( Number.isNaN( start ) )
-          throw new Error( `Non-numeric value "${ rangePart }" in field "${ fieldName }"` );
+          if ( Number.isNaN( start ) || Number.isNaN( end ) )
+            throw new Error( `Non-numeric range "${ segment }" in field "${ fieldName }"` );
+        }
       }
+
+      if ( start > end || start < min || end > max )
+        throw new Error( `Invalid range "${ segment }" in field "${ fieldName }"` );
 
       components.push( { start, end, step } );
     }
@@ -98,8 +95,7 @@ export class CronParser {
     const { min, max } = FIELD_BY_NAME[ fieldName ], values = new Set< number >();
 
     for ( const { start, end, step } of components ) for ( let v = start; v <= end; v += step )
-      if ( values.has( v ) ) continue;
-      else if ( v < min || v > max )
+      if ( v < min || v > max )
         throw new Error( `Value ${ v } out of range [${ min }-${ max }] for field "${ fieldName }"` )
       else values.add( v );
 
@@ -107,29 +103,34 @@ export class CronParser {
   }
 
   /**
-   * Parse a cron expression string into a structured CronObject.
+   * Convert a cron expression into a structured CronObject.
    * 
    * @param expression - A standard 5-field cron string or special alias.
-   * @returns A CronObject with each field's raw string value.
+   * @returns A CronObject containing the raw field values.
    * @throws Error if the expression is malformed.
    * 
    * @example
-   * parser.parse( '0 9 * * MON' );
+   * parser.toObject( '0 9 * * MON' );
    */
-  public parse ( expression: string ) : CronObject {
+  public toObject ( expression: string ) : CronObject {
     const [ minute, hour, dayOfMonth, month, dayOfWeek ] = this.splitFields( this.expandAlias( expression ) );
     return { minute, hour, dayOfMonth, month, dayOfWeek };
   }
 
   /**
-   * Parse a cron expression into a fully resolved internal representation
-   * with pre-computed value sets for efficient matching.
+   * Parse a cron expression into a fully validated internal representation.
+   * 
+   * The returned object contains the parsed field definitions together with
+   * pre-computed value sets for efficient schedule evaluation.
    * 
    * @param expression - A standard 5-field cron string or special alias.
-   * @returns A ParsedCronExpression with computed value sets.
-   * @throws Error if the expression is malformed or contains out-of-range values.
+   * @returns A fully parsed cron expression.
+   * @throws Error if the expression is malformed or contains invalid values.
+   * 
+   * @example
+   * const parsed = parser.parse( '* 9-17 * JAN,MAR MON-FRI' );
    */
-  public parseFull ( expression: string ) : ParsedCronExpression {
+  public parse ( expression: string ) : ParsedCronExpression {
     const tokens = this.splitFields( this.expandAlias( expression ) );
     const fields = {} as Record< CronFieldName, ParsedField >;
 
@@ -154,7 +155,7 @@ export class CronParser {
    * parser.validate( '99 * * * *' );   // false
    */
   public validate ( expression: string ) : boolean {
-    try { return this.parseFull( expression ) && true }
+    try { return this.parse( expression ) && true }
     catch { return false }
   }
 }
