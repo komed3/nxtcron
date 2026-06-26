@@ -76,6 +76,16 @@ export class CronCalculator {
     return out;
   }
 
+  /** Cron day matching logic (DOM + DOW semantics). */
+  private match ( parsed: ParsedCronExpression, dom: number, dow: number ) : boolean {
+    const day = parsed.fields.dayOfMonth;
+    const dayOfWeek = parsed.fields.dayOfWeek;
+
+    return ( day.wildcard || dayOfWeek.wildcard )
+      ? day.values.has( dom ) || dayOfWeek.values.has( dow )
+      : day.values.has( dom ) && dayOfWeek.values.has( dow );
+  }
+
   /** Extract timezone-safe date parts. */
   private parts ( date: Date, tz: string ) : DateParts {
     const f = new Intl.DateTimeFormat( 'en-US', {
