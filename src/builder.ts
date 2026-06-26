@@ -52,10 +52,10 @@ export class CronBuilder {
   }
 
   /** Normalize any input into a cron field expression string. */
-  private normalize ( input: string | number ) : string {
-    if ( typeof input === 'number' ) return String( input );
+  private normalizeValue ( value: string | number ) : string {
+    if ( typeof value === 'number' ) return String( value );
 
-    const key = input.toUpperCase(), alias = this.def.aliases[ key ];
+    const key = value.toUpperCase(), alias = this.def.aliases[ key ];
     return alias !== undefined ? String( alias ) : key;
   }
 
@@ -71,7 +71,7 @@ export class CronBuilder {
 
   /** Build a field expression string. */
   private buildExpr ( values: ( string | number )[] ) : string {
-    return values.map( v => this.normalize( v ) ).join( ',' );
+    return values.map( v => this.normalizeValue( v ) ).join( ',' );
   }
 
   /** Update the current cron field. */
