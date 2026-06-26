@@ -57,7 +57,7 @@ export class CronBuilder {
 
     const alias = this.def.aliases[ value.toUpperCase() ];
     if ( alias === undefined )
-      throw new Error( `Invalid value for "${ this.requireField() }"` );
+      throw new Error( `Invalid value "${ String( value ) }" for "${ this.requireField() }"` );
 
     return String( alias );
   }
