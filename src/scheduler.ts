@@ -55,5 +55,30 @@ export class CronScheduler {
       if ( id !== undefined ) clearTimeout( id ), id = undefined;
       emit( 'stopped' );
     };
+
+    // Schedule the next occurrence of the cron expression
+    const scheduleNext = () => {
+      if ( stopped ) return;
+
+      try {
+        const next = CronScheduler.calculator.next( parsed, { timezone, after: cursor } );
+        if ( ! next.length ) return stop();
+
+        cursor = next[ 0 ];
+        const now = Date.now(), delay = cursor.getTime() - now;
+
+        id = setTimeout( delay < 0 ? scheduleNext : () => {
+          if ( stopped ) return;
+
+          try { emit( 'tick' ), callback() }
+          catch ( err ) { emit( 'error', err ) }
+
+          scheduleNext();
+        }, Math.max( delay, 1 ) );
+
+      } catch ( err ) {
+        emit( 'error', err );
+      }
+    };
   }
 }
