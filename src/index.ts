@@ -25,6 +25,9 @@ const creator = CronCreator.getInstance();
 const parser = CronParser.getInstance();
 const scheduler = CronScheduler.getInstance();
 
+/** Convert a cron expression into a ordered CronTuple. */
+export const toTuple = parser.toTuple.bind( parser );
+
 /** Convert a cron expression into a structured CronObject. */
 export const toObject = parser.toObject.bind( parser );
 
@@ -34,11 +37,11 @@ export const parse = parser.parse.bind( parser );
 /** Validate a cron expression without throwing. Returns true or false. */
 export const validate = parser.validate.bind( parser );
 
-/** Create a cron expression string from a partial options object. Omitted fields default to wildcard. */
-export const fromObject = creator.fromObject.bind( creator );
-
 /** Create a cron expression string from a cron field tuple. */
 export const fromTuple = creator.fromTuple.bind( creator );
+
+/** Create a cron expression string from a partial options object. Omitted fields default to wildcard. */
+export const fromObject = creator.fromObject.bind( creator );
 
 /** Create a cron expression string from individual field values. Omitted fields default to wildcard. */
 export const create = creator.create.bind( creator );
@@ -54,8 +57,8 @@ export const schedule = scheduler.schedule.bind( scheduler );
 
 /** Export the nxtcron object containing all instances and methods. */
 export const nxtcron = {
-  calculator, creator, parser, scheduler, toObject, parse, validate,
-  fromObject, fromTuple, create, next, prev, schedule
+  calculator, creator, parser, scheduler, toTuple, toObject, parse,
+  validate, fromTuple, fromObject, create, next, prev, schedule
 }
 
 /** Default export the nxtcron object. */

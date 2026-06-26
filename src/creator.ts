@@ -18,6 +18,19 @@ export class CronCreator {
   private constructor () {}
 
   /**
+   * Create a cron expression string from a cron field tuple.
+   * 
+   * @param tuple - Cron field values in standard order.
+   * @returns A valid 5-field cron expression.
+   * 
+   * @example
+   * creator.fromTuple( [ '0', '9', '*', '*', 'MON' ] );
+   */
+  public fromTuple ( tuple: CronTuple ) : string {
+    return tuple.join( ' ' );
+  }
+
+  /**
    * Create a cron expression string from a partial CronObject.
    * 
    * Any omitted fields default to the wildcard (`*`).
@@ -35,19 +48,6 @@ export class CronCreator {
   public fromObject ( options: CronOptions ) : string {
     const merged: CronObject = { ...CRON_DEFAULTS, ...options };
     return FIELD_NAMES.map( name => merged[ name ] ).join( ' ' );
-  }
-
-  /**
-   * Create a cron expression string from a cron field tuple.
-   * 
-   * @param tuple - Cron field values in standard order.
-   * @returns A valid 5-field cron expression.
-   * 
-   * @example
-   * creator.fromTuple( [ '0', '9', '*', '*', 'MON' ] );
-   */
-  public fromTuple ( tuple: CronTuple ) : string {
-    return tuple.join( ' ' );
   }
 
   /**

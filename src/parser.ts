@@ -104,7 +104,7 @@ export class CronParser {
   }
 
   /**
-   * Convert a cron expression into a ordered tuple.
+   * Convert a cron expression into a ordered CronTuple.
    * 
    * @param expr - A standard 5-field cron string or special alias.
    * @returns A CronTuple with ordered cron fields
