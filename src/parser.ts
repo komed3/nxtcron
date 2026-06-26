@@ -95,11 +95,12 @@ export class CronParser {
 
   /** Compute and validate the full set of matching integers from parsed components. */
   private computeValues ( components: ParsedFieldComponent[], fieldName: CronFieldName ) : Set< number > {
-    const def = FIELD_BY_NAME[ fieldName ], values = new Set< number >();
+    const { min, max } = FIELD_BY_NAME[ fieldName ], values = new Set< number >();
 
-    for ( const comp of components ) for ( let v = comp.start; v <= comp.end; v += comp.step )
-      if ( v < def.min || v > def.max )
-        throw new Error( `Value ${ v } out of range [${ def.min }-${ def.max }] for field "${ fieldName }"` )
+    for ( const { start, end, step } of components ) for ( let v = start; v <= end; v += step )
+      if ( values.has( v ) ) continue;
+      else if ( v < min || v > max )
+        throw new Error( `Value ${ v } out of range [${ min }-${ max }] for field "${ fieldName }"` )
       else values.add( v );
 
     return values;
