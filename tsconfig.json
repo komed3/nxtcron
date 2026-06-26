@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "moduleResolution": "bundler",
-    "lib": [ "ESNext", "ESNext.Intl" ],
+    "lib": [ "DOM", "ESNext", "ESNext.Intl" ],
     "declaration": false,
     "declarationMap": false,
     "sourceMap": false,
