@@ -27,12 +27,12 @@ export class CronCalculator {
   }
 
   /** Get number of days in month. */
-  private daysInMonth ( year: number, month: number ) : number {
+  private DOM ( year: number, month: number ) : number {
     return new Date( year, month, 0 ).getDate();
   }
 
   /** Get the day of week. */
-  private dayOfWeek ( year: number, month: number, day: number ) : number {
+  private DOW ( year: number, month: number, day: number ) : number {
     return new Date( year, month - 1, day ).getDay();
   }
 
