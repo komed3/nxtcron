@@ -16,13 +16,17 @@ import { CronCalculator } from './calculator';
 import { CronCreator } from './creator';
 import { CronParser } from './parser';
 
+/** Export classes. */
 export { CronCalculator, CronCreator, CronParser };
 
 const calculator = new CronCalculator();
 const creator = new CronCreator();
 const parser = new CronParser();
 
-/** Parse a cron expression string into a structured object. */
+/** Convert a cron expression into a structured CronObject. */
+export const toObject = parser.toObject.bind( parser );
+
+/** Parse a cron expression into a fully validated internal representation. */
 export const parse = parser.parse.bind( parser );
 
 /** Validate a cron expression without throwing. Returns true or false. */
@@ -32,5 +36,6 @@ export const validate = parser.validate.bind( parser );
 export const fromObject = creator.fromObject.bind( creator );
 
 export default ( {
-  calculator, creator, parser, parse, validate, fromObject
+  calculator, creator, parser,
+  toObject, parse, validate, fromObject
 } ) as const;
