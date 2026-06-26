@@ -104,12 +104,12 @@ export class CronBuilder {
     return this.next( {}, 'dayOfWeek' );
   }
 
-  /** Set explicit value(s). */
-  public value ( ...values: ( string | number )[] ) : CronBuilder {
-    return this.set( this.buildExpr( values ) );
+  /** Set explicit value. */
+  public value ( value: string | number ) : CronBuilder {
+    return this.set( this.buildExpr( [ value ] ) );
   }
 
-  /** Set full list (alias for value). */
+  /** Set full list of values. */
   public list ( ...values: ( string | number )[] ) : CronBuilder {
     return this.set( this.buildExpr( values ) );
   }
