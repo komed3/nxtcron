@@ -76,7 +76,6 @@
     "docs": "typedoc --logLevel Verbose --options typedoc.json"
   },
   "devDependencies": {
-    "@types/node": "^26.0.1",
     "esbuild": "^0.28.1",
     "prettier": "^3.8.4",
     "rimraf": "^6.1.3",
