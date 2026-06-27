@@ -14,8 +14,16 @@ For the complete API reference, see the [project documentation](https://komed3.g
 
 ## Installation
 
+Install via the npm registry:
+
 ```bash
 npm install nxtcron
+```
+
+Or use the browser bundle via CDN:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/nxtcron/dist/nxtcron.js"></script>
 ```
 
 ## Quick Start
@@ -34,6 +42,8 @@ const runs = next( '0 9 * * MON-FRI', {
 
 ### Builder
 
+Create cron expressions using the immutable fluent builder API.
+
 ```ts
 import { build } from 'nxtcron';
 
@@ -48,6 +58,8 @@ const expr = build()
 
 ### Parsing
 
+Parse and fully validate a cron expression.
+
 ```ts
 import { parse, validate } from 'nxtcron';
 
@@ -56,6 +68,8 @@ const parsed = parse( '0 12 * * MON' );
 ```
 
 ### Creating Expressions
+
+Create a cron expression from individual field values, an ordered field tuple or the structured cron object.
 
 ```ts
 import { create, fromObject, fromTuple } from 'nxtcron';
@@ -67,6 +81,8 @@ fromTuple( [ '0', '12', '*', '*', 'MON' ] );
 
 ### Calculating Execution Times
 
+Calculate the next and previous scheduled execution time(s).
+
 ```ts
 import { next, prev } from 'nxtcron';
 
@@ -75,6 +91,8 @@ prev( '0 0 1 * *', { before: new Date( '2020-06-01' ) } );
 ```
 
 ### Scheduling
+
+Schedule recurring executions using a cron expression.
 
 ```ts
 import { schedule } from 'nxtcron';
