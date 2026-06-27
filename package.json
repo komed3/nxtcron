@@ -49,18 +49,18 @@
   "types": "./dist/types/index.d.ts",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
+  "default": "./dist/esm/index.js",
+  "browser": "./dist/nxtcron.js",
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/types/index.d.ts",
-        "default": "./dist/esm/index.js"
-      },
-      "require": {
-        "types": "./dist/types/index.d.ts",
-        "default": "./dist/cjs/index.js"
-      }
-    }
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/esm/index.js"
+    },
+    "./bundle": "./dist/ntxcron.js"
   },
+  "sideEffects": false,
   "scripts": {
     "clean": "rimraf dist",
     "build:cjs": "tsc -p tsconfig.cjs.json",
