@@ -107,12 +107,17 @@ test( 'timezone Europe/Berlin', () => {
 } );
 
 test( 'DST transition', () => {
-  expect( next('30 2 * * *', {
+  expect( next( '30 2 * * *', {
     ...after( '2026-10-24T22:00:00Z' ),
     timezone: 'Europe/Berlin'
   } )[ 0 ].toISOString() ).toBe(
     '2026-10-25T01:30:00.000Z'
   );
+} );
+
+test( 'stress tests', () => {
+  expect( next( '*/3 2-23 * * MON-FRI', { count: 10000 } ).length ).toBe( 10000 );
+  expect( prev( '0 0 1 1 *', { count: 10000 } ).length ).toBe( 10000 );
 } );
 
 summary();
