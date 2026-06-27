@@ -20,6 +20,8 @@ export type {
   ScheduleController, ScheduleEvent, ScheduleOptions, SpecialAlias
 } from './types';
 
+export { FIELDS, SPECIAL_ALIASES } from './const';
+
 import { CronBuilder } from './builder';
 import { CronCalculator } from './calculator';
 import { CronCreator } from './creator';
