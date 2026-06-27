@@ -8,16 +8,15 @@ let passed = 0, failed = 0;
 /** Register and execute a test case. */
 export function test ( name: string, fn: () => void ) : void {
   const t = performance.now();
+  const s = () => ( performance.now() - t ).toFixed( 3 );
 
   try {
     fn(), passed++;
-    console.log( `✓ ${ name }` );
+    console.log( `✓ ${ name } (${ s() } ms)` );
   } catch ( err ) {
     failed++;
-    console.error( `✗ ${ name }` );
+    console.error( `✗ ${ name } (${ s() } ms)` );
     console.error( err );
-  } finally {
-    console.log( `✓ ${ name } (${ ( performance.now() - t ).toFixed( 2 ) } ms)` );
   }
 }
 
@@ -26,8 +25,7 @@ export function expect < T > ( actual: T ) {
   return {
     /** Assert strict equality. */
     toBe ( expected: T ) : void {
-      if ( actual !== expected )
-        throw new Error( `Expected ${ expected }, received ${ actual }` );
+      if ( actual !== expected ) throw new Error( `Expected ${ expected }, received ${ actual }` );
     },
 
     /** Assert deep equality. */
@@ -47,11 +45,11 @@ export function expect < T > ( actual: T ) {
 }
 
 /** Print test summary. */
-export function summary () : void {
+export function summary () : boolean {
   console.log();
-  console.log( `Passed: ${ passed }` );
-  console.log( `Failed: ${ failed }` );
-  console.log( `Total : ${ passed + failed }` );
+  console.log( `Passed :: ${ passed.toString().padStart( 4, ' ' ) }` );
+  console.log( `Failed :: ${ failed.toString().padStart( 4, ' ' ) }` );
+  console.log( `Total  :: ${ ( passed + failed ).toString().padStart( 4, ' ' ) }` );
 
-  if ( failed ) process.exitCode = 1;
+  return failed === 0;
 }
