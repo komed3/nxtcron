@@ -4,8 +4,10 @@
  * scheduling, and calculating cron expressions.
  * 
  * Designed for both browser and Node.js environments, nxtcron provides a
- * modern, immutable, fast and fully typed API while remaining compact
- * enough for production use.
+ * modern, immutable, fast, and fully typed API with a consistent programming
+ * model across all modules. Every component is built around deterministic
+ * behavior and shared internal representations, making it suitable for both
+ * one-off cron operations and long-running scheduling tasks.
  * 
  * @author Paul Köhler (komed3)
  * @version 1.0.0
