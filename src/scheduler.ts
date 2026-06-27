@@ -35,8 +35,6 @@ export class CronScheduler {
    * job.stop();
    */
   public schedule ( expr: CronInput, callback: () => void, options?: ScheduleOptions ) : ScheduleController {
-    const parsed = typeof expr === 'string' ? CronScheduler.parser.parse( expr ) : expr;
-    const timezone = options?.timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone;
     const handlers: Record< ScheduleEvent, Set< EventHandler > > = {
       tick: new Set(), error: new Set(), stopped: new Set()
     };
@@ -55,6 +53,36 @@ export class CronScheduler {
       if ( id !== undefined ) clearTimeout( id ), id = undefined;
       emit( 'stopped' );
     };
+
+    // Create the schedule controller object
+    const controller: ScheduleController = {
+      /** Stop the scheduled job. No further callbacks will fire. */
+      stop,
+
+      /** Register an event handler. */
+      on ( event, handler ) {
+        handlers[ event ].add( handler );
+        return controller;
+      },
+
+      /** Remove an event handler. */
+      off ( event, handler ) {
+        handlers[ event ].delete( handler );
+        return controller;
+      }
+    };
+
+    // Handle "@reboot": fire once immediately
+    if ( typeof expr === 'string' && expr.trim().toLowerCase() === '@reboot' ) {
+      try { emit( 'tick' ), callback() }
+      catch ( err ) { emit( 'error', err ) }
+
+      stop();
+      return controller;
+    }
+
+    const parsed = typeof expr === 'string' ? CronScheduler.parser.parse( expr ) : expr;
+    const timezone = options?.timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     // Schedule the next occurrence of the cron expression
     const scheduleNext = () => {
@@ -81,34 +109,7 @@ export class CronScheduler {
       }
     };
 
-    // Handle "@reboot": fire once immediately
-    if ( typeof expr === 'string' && expr.trim().toLowerCase() === '@reboot' ) {
-      try { emit( 'tick' ), callback() }
-      catch ( err ) { emit( 'error', err ) }
-
-      stop();
-    } else {
-      scheduleNext();
-    }
-
-    // Create the schedule controller object
-    const controller: ScheduleController = {
-      /** Stop the scheduled job. No further callbacks will fire. */
-      stop,
-
-      /** Register an event handler. */
-      on ( event, handler ) {
-        handlers[ event ].add( handler );
-        return controller;
-      },
-
-      /** Remove an event handler. */
-      off ( event, handler ) {
-        handlers[ event ].delete( handler );
-        return controller;
-      }
-    };
-
+    scheduleNext();
     return controller;
   }
 }
