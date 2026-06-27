@@ -73,6 +73,7 @@
     "build": "npm run clean && npm run build:all && npm run format && npm run bundle",
     "postbuild": "tsc-alias",
     "prepublishOnly": "npm run build",
+    "test": "npx ts-node ./test/run.test.ts",
     "docs": "typedoc --logLevel Verbose --options typedoc.json"
   },
   "devDependencies": {
