@@ -38,6 +38,7 @@
     "type": "ko-fi",
     "url": "https://ko-fi.com/komed3"
   },
+  "sideEffects": false,
   "engines": {
     "node": ">=16.0.0"
   },
@@ -50,7 +51,6 @@
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "default": "./dist/esm/index.js",
-  "browser": "./dist/nxtcron.js",
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
@@ -58,9 +58,9 @@
       "require": "./dist/cjs/index.js",
       "default": "./dist/esm/index.js"
     },
-    "./bundle": "./dist/ntxcron.js"
+    "./bundle": "./dist/nxtcron.js",
+    "./package.json": "./package.json"
   },
-  "sideEffects": false,
   "scripts": {
     "clean": "rimraf dist",
     "build:cjs": "tsc -p tsconfig.cjs.json",
