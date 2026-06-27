@@ -8,7 +8,8 @@
  */
 
 export type {
-  CronFieldName, CronObject, CronOptions, CronTuple, RunOptions,
+  CronFieldName, CronInput, CronObject, CronOptions, CronTuple,
+  ParsedCronExpression, ParsedField, ParsedFieldComponent, RunOptions,
   ScheduleController, ScheduleEvent, ScheduleOptions, SpecialAlias
 } from './types';
 
