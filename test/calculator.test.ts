@@ -57,4 +57,15 @@ test( 'multiple results', () => {
   ] );
 } );
 
+test( 'prev multiple', () => {
+  expect( prev( '0 * * * *', {
+    ...before( '2026-06-26T18:15:00Z' ),
+    count: 3
+  } ).map( d => d.toISOString() ) ).toEqual( [
+    '2026-06-26T18:00:00.000Z',
+    '2026-06-26T17:00:00.000Z',
+    '2026-06-26T16:00:00.000Z'
+  ] );
+} );
+
 summary();
