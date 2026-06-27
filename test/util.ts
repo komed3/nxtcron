@@ -1,6 +1,6 @@
 /**
  * Test Utility
- * Minimal test utility.
+ * Minimal test utility for nxtcron library.
  */
 
 let passed = 0, failed = 0;
@@ -51,5 +51,8 @@ export function summary () : boolean {
   console.log( `Failed :: ${ failed.toString().padStart( 4, ' ' ) }` );
   console.log( `Total  :: ${ ( passed + failed ).toString().padStart( 4, ' ' ) }` );
 
-  return failed === 0;
+  const ok = failed === 0;
+  passed = 0, failed = 0;
+
+  return ok;
 }
