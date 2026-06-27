@@ -1,0 +1,31 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": [ "./src/*" ],
+  "entryPointStrategy": "expand",
+  "out": "docs",
+  "githubPages": true,
+  "searchInComments": true,
+  "searchInDocuments": true,
+  "includeVersion": true,
+  "includeHierarchySummary": false,
+  "excludePrivate": false,
+  "excludeProtected": false,
+  "excludeInternal": false,
+  "excludeExternals": true,
+  "name": "nxtcron",
+  "customFooterHtml": "<b>nxtcron V1</b> — Copyright © 2026 Paul Köhler (komed3) <br /> Distributed under the MIT license.",
+  "hideGenerator": true,
+  "headings": {
+    "readme": false,
+    "document": false
+  },
+  "navigationLinks": {
+    "GitHub": "https://github.com/komed3/nxtcron",
+    "npm": "https://npmjs.com/nxtcron",
+    "jsDelivr": "https://jsdelivr.com/package/npm/nxtcron",
+    "Support": "https://ko-fi.com/komed3"
+  },
+  "visibilityFilters": {},
+  "plugin": [ "typedoc-plugin-missing-exports", "typedoc-github-theme" ],
+  "theme": "typedoc-github-theme"
+}
