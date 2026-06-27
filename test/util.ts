@@ -3,8 +3,7 @@
  * Minimal test utility.
  */
 
-let passed = 0;
-let failed = 0;
+let passed = 0, failed = 0;
 
 /** Register and execute a test case. */
 export function test ( name: string, fn: () => void ) : void {
@@ -44,4 +43,14 @@ export function expect < T > ( actual: T ) {
       throw new Error( 'Expected function to throw.' );
     }
   };
+}
+
+/** Print test summary. */
+export function summary () : void {
+  console.log();
+  console.log( `Passed: ${ passed }` );
+  console.log( `Failed: ${ failed }` );
+  console.log( `Total : ${ passed + failed }` );
+
+  if ( failed ) process.exitCode = 1;
 }
