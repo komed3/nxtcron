@@ -1,5 +1,9 @@
 # nxtcron
 
+[![Static Badge](https://img.shields.io/badge/dev_docs-dev_docs?style=for-the-badge&logo=typescript&logoColor=fff&color=blue)](https://komed3.github.io/nxtcron)
+[![NPM License](https://img.shields.io/npm/l/nxtcron?style=for-the-badge&logo=unlicense&logoColor=fff)](https://github.com/komed3/nxtcron/blob/master/LICENSE)
+[![GitHub package.json version](https://img.shields.io/github/package-json/v/komed3/nxtcron?style=for-the-badge\&logo=npm\&logoColor=fff)](https://npmjs.com/nxtcron)
+
 **A zero-dependency TypeScript toolkit for creating, parsing, validating, scheduling and calculating standard five-field cron expressions.**
 
 The package consists of several independent modules that can be used together or individually:
