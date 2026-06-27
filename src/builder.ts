@@ -63,13 +63,14 @@ export class CronBuilder {
   }
 
   /** Validate a cron field value against its allowed range. */
-  private validate ( value: number ) : number {
+  private validate ( value: string | number ) : number {
     const { min, max } = this.def;
+    const n = Number( value );
 
-    if ( value < min || value > max )
+    if ( Number.isNaN( n ) || n < min || n > max )
       throw new Error( `Value ${ value } out of range [${ min }-${ max }] for "${ this.requireField() }"` );
 
-    return value;
+    return n;
   }
 
   /** Clamp a cron field value to its allowed range. */
@@ -80,7 +81,7 @@ export class CronBuilder {
 
   /** Build a field expression string. */
   private buildExpr ( values: ( string | number )[] ) : string {
-    return values.map( v => this.resolve( v ) ).join( ',' );
+    return values.map( v => this.validate( this.resolve( v ) ) ).join( ',' );
   }
 
   /** Update the current cron field. */
