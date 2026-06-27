@@ -5,6 +5,13 @@
 
 let passed = 0, failed = 0;
 
+/** Print the headline. */
+export function hl ( name: string ) : void {
+  console.log();
+  console.log( `=== ${ name } ===` );
+  console.log();
+}
+
 /** Register and execute a test case. */
 export function test ( name: string, fn: () => void ) : void {
   const t = performance.now();
@@ -50,6 +57,7 @@ export function summary () : boolean {
   console.log( `Passed :: ${ passed.toString().padStart( 3, ' ' ) }` );
   console.log( `Failed :: ${ failed.toString().padStart( 3, ' ' ) }` );
   console.log( `Total  :: ${ ( passed + failed ).toString().padStart( 3, ' ' ) }` );
+  console.log();
 
   const ok = failed === 0;
   passed = 0, failed = 0;

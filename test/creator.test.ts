@@ -1,7 +1,7 @@
 import { create, fromObject, fromTuple } from '../src';
-import { expect, summary, test } from './util';
+import { expect, hl, summary, test } from './util';
 
-console.log( '=== CREATOR ===' );
+hl( 'CREATOR' );
 
 test( 'create', () => {
   expect( create( '5', '12', '*', 'JAN', 'MON' ) ).toBe( '5 12 * JAN MON' );

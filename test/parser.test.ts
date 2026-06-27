@@ -1,7 +1,7 @@
 import { parse, toObject, toTuple, validate } from '../src';
-import { expect, summary, test } from './util';
+import { expect, hl, summary, test } from './util';
 
-console.log( '=== PARSER ===' );
+hl( 'PARSER' );
 
 test( 'validate valid expression', () => {
   expect( validate( '*/5 2 * JAN MON-FRI' ) ).toBe( true );
