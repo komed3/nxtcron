@@ -47,9 +47,9 @@ export function expect < T > ( actual: T ) {
 /** Print test summary. */
 export function summary () : boolean {
   console.log();
-  console.log( `Passed :: ${ passed.toString().padStart( 4, ' ' ) }` );
-  console.log( `Failed :: ${ failed.toString().padStart( 4, ' ' ) }` );
-  console.log( `Total  :: ${ ( passed + failed ).toString().padStart( 4, ' ' ) }` );
+  console.log( `Passed :: ${ passed.toString().padStart( 3, ' ' ) }` );
+  console.log( `Failed :: ${ failed.toString().padStart( 3, ' ' ) }` );
+  console.log( `Total  :: ${ ( passed + failed ).toString().padStart( 3, ' ' ) }` );
 
   const ok = failed === 0;
   passed = 0, failed = 0;
